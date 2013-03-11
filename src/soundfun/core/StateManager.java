@@ -52,12 +52,23 @@ public class StateManager {
 		mSelectedButton = name;
 		
 		String title = getCurrentStates().get(name).getTitle();
-		
+		// Visual update.
 		UIManager.getSingleton().getMainWindow().getActionListPanel().getList().setSelectedValue(title, true);
 		mActionListLogic.selected(title);
 	}
 	
 	public String getSelectedButton() {
 		return mSelectedButton;
+	}
+	
+	/*
+	 * Contains a reference to every plugin used by the history of the program.
+	 * String should be in the format "ButtonTitle::ActionTitle"
+	 * 	ex: "Button A::Karlor's Plugin 12"
+	 */
+	private HashMap<String, PluginInfo> mPluginHistoryReferences = new HashMap<String, PluginInfo>();
+	
+	public HashMap<String, PluginInfo> getPluginHistoryReferences() {
+		return mPluginHistoryReferences;
 	}
 }

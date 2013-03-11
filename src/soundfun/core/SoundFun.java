@@ -37,13 +37,15 @@ public class SoundFun {
 
 			try {
 				new ButtonListLogic();
-			} catch (CloneNotSupportedException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			ActionListLogic actionLogic = new ActionListLogic();
 			StateManager.getSingleton().setActionListLogic(actionLogic);
+			
+			UIManager.getSingleton().getMainWindow().getButtonListPanel().getList().setSelectedValue("Button A", true);
 			
 			mPluginManager.dispose();
 		} catch(Exception e) {

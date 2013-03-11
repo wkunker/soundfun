@@ -6,6 +6,8 @@ import soundfun.ui.UIManager;
  * Controls logic for the action list (selection of action plugins).
  * 
  * This visually modifies the action list as well as the action details.
+ * 
+ * Button listbox titles names characters not permitted: "::"
  */
 public class ButtonListLogic implements soundfun.ui.ListListener {
 	UIManager mUIManager = UIManager.getSingleton();
