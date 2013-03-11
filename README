@@ -1,0 +1,3 @@
+Linux: must add user to dialout group for device to be recognized.
+
+usermod -aG dialout <myuser>
