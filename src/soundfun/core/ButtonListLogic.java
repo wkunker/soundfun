@@ -34,7 +34,7 @@ public class ButtonListLogic implements soundfun.ui.ListListener {
 	 * a new action has been chosen.
 	 */
 	@Override
-	public void selected(String buttonName) {		
+	public void selected(String buttonName) {
 		StateManager.getSingleton().setSelectedButton(buttonName);
 		
 		/*

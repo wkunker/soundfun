@@ -6,6 +6,9 @@ public class UIManager {
 	//private MainWindow mMainWindow = null;
 	private MainWindow mMainWindow = null;
 	
+	private boolean mIsSetupComplete = false;
+	private short setupCompleteCtr = 0;
+	
 	// Private to prevent multiple instances.
 	private UIManager() {
 		mMainWindow = new MainWindow();
@@ -45,5 +48,16 @@ public class UIManager {
 			mSingleton = new UIManager();
 		
 		return mSingleton;
+	}
+	
+	void _setupComplete() {
+		// Has to be called twice, since two list boxes must complete.
+		if(setupCompleteCtr >= 1)
+			mIsSetupComplete = true;
+		setupCompleteCtr++;
+	}
+	
+	public boolean isSetupComplete() {
+		return mIsSetupComplete;
 	}
 }

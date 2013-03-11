@@ -19,8 +19,10 @@ public class ListPanel extends Panel {
 		mList.addListSelectionListener(mListDispatcher);
 	}
 	
+	// The "swing-friendly" thread calls this when it's ready to process the elemnts.
 	void _timerCalled(String element) {
 		mListModel.addElement(element);
+		UIManager.getSingleton()._setupComplete();
 	}
 	
 	public List getList() {

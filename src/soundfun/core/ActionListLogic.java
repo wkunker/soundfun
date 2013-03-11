@@ -41,6 +41,8 @@ public class ActionListLogic implements soundfun.ui.ListListener {
 			break;
 		}
 		
+		UIManager.getSingleton().getMainWindow().getActionListPanel().getList().setEnabled(false);
+		
 		// Force a selection to occur so the action that's selected by default is loaded into the action details panel.
 		//this.selected(UIManager.getSingleton().getMainWindow().getActionListPanel().getList().getSelectedValue());
 	}

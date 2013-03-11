@@ -51,6 +51,11 @@ public class StateManager {
 	public void setSelectedButton(String name) {
 		mSelectedButton = name;
 		
+		// The action list is disabled by default, until a button is selected.
+		if(!UIManager.getSingleton().getMainWindow().getActionListPanel().getList().isEnabled()) {
+			UIManager.getSingleton().getMainWindow().getActionListPanel().getList().setEnabled(true);
+		}
+		
 		String title = getCurrentStates().get(name).getTitle();
 		// Visual update.
 		UIManager.getSingleton().getMainWindow().getActionListPanel().getList().setSelectedValue(title, true);

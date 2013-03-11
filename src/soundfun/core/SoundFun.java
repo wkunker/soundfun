@@ -45,7 +45,6 @@ public class SoundFun {
 			ActionListLogic actionLogic = new ActionListLogic();
 			StateManager.getSingleton().setActionListLogic(actionLogic);
 			
-			UIManager.getSingleton().getMainWindow().getButtonListPanel().getList().setSelectedValue("Button A", true);
 			
 			mPluginManager.dispose();
 		} catch(Exception e) {
