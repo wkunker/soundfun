@@ -19,6 +19,10 @@ public class ListPanel extends Panel {
 		mList.addListSelectionListener(mListDispatcher);
 	}
 	
+	void _timerCalled(String element) {
+		mListModel.addElement(element);
+	}
+	
 	public List getList() {
 		return mList;
 	}
@@ -28,7 +32,13 @@ public class ListPanel extends Panel {
 	}
 	
 	public void addListElement(String element) {
-		mListModel.addElement(element);
+		// The process of adding elements to the list panel is
+		// executed its own "Swing-friendly" thread so no
+		// anomalous behavior occurs.
+		ListTimerListener lt = new ListTimerListener(this, element);
+		javax.swing.Timer t = new javax.swing.Timer(1, lt);
+        t.setRepeats(false);
+        t.start();
 	}
 	
 	public void removeListElement(String element) {
