@@ -44,6 +44,10 @@ public class StateManager {
 	private HashMap<String, PluginInfo> mCurrentStates = new HashMap<String, PluginInfo>();
 	private String mSelectedButton = null;
 	
+	/*
+	 * Key holds the button, value holds the PluginInfo
+	 * that is currently bound to that button.
+	 */
 	public HashMap<String, PluginInfo> getCurrentStates() {
 		return mCurrentStates;
 	}

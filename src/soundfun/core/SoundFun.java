@@ -45,6 +45,14 @@ public class SoundFun {
 			ActionListLogic actionLogic = new ActionListLogic();
 			StateManager.getSingleton().setActionListLogic(actionLogic);
 			
+			// Initialize the SerialManager class.
+			soundfun.serial.SerialManager sm =
+					soundfun.serial.SerialManager.getSingleton();
+			
+			// Fire up serial interface.
+			SerialLogic serialLogic = new SerialLogic();
+			sm.addSerialInterface(serialLogic);
+			sm.startSerialListener();
 			
 			mPluginManager.dispose();
 		} catch(Exception e) {

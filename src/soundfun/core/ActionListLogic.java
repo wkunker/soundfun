@@ -72,6 +72,9 @@ public class ActionListLogic implements soundfun.ui.ListListener {
 					    	
 					    	// Update the existing plugin into the StateManager.
 					    	StateManager.getSingleton().getCurrentStates().put(StateManager.getSingleton().getSelectedButton(), entry.getValue());
+					    	
+					    	// Tell the plugin what button is calling it.
+					    	c.getPluginInfo().setLastAssignedButton(StateManager.getSingleton().getSelectedButton());
 							
 					    	// Visually update the existing plugin into the action details panel.
 					    	UIManager.getSingleton().getMainWindow().setActionDetailsPanel(
