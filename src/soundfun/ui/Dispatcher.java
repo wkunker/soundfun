@@ -9,7 +9,7 @@ public abstract class Dispatcher<T> {
 	private final ArrayList<T> mListeners = new ArrayList<T>();
 	
 	public Dispatcher() {
-		
+		this.initialize();
 	}
 	
 	protected final ArrayList<T> getListeners() {

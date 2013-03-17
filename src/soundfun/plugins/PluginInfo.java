@@ -42,18 +42,33 @@ public class PluginInfo {
 	private String mLastAssignedButton = null;
 	private ArrayList<Action> mActions = new ArrayList<Action>();
 	
+	/*
+	 * Set which button this instance of
+	 * PluginInfo was last bound to.
+	 */
 	public void setLastAssignedButton(String button) {
 		mLastAssignedButton = button;
 	}
 	
+	/*
+	 * Get which button this instance of
+	 * PluginInfo was last bound to.
+	 */
 	public String getLastAssignedButton() {
 		return mLastAssignedButton;
 	}
 	
+	/*
+	 * Register an instance of Action to
+	 * accept events as they are passed in.
+	 */
 	public void registerAction(Action a) {
 		mActions.add(a);
 	}
 	
+	/*
+	 * Call every Action which has been registered.
+	 */
 	public void actionCalled(String evt) {
 		for(Action a : mActions) {
 			a.serialEvent(evt);

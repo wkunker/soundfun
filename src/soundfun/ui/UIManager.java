@@ -8,6 +8,27 @@ public class UIManager {
 	
 	// Private to prevent multiple instances.
 	private UIManager() {
+		/*
+		 * Set the look and feel to the native OS.
+		 */
+		try {
+		    try {
+				javax.swing.UIManager.setLookAndFeel(
+						javax.swing.UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+		  System.out.println("Unable to load native look and feel");
+		}
+		
 		mMainWindow = new MainWindow();
 	}
 	
