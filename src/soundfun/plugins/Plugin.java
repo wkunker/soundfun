@@ -15,16 +15,9 @@ public interface Plugin extends net.xeoh.plugins.base.Plugin {
 	 * Perform initial construction of the plugin.
 	 * Returns an instance of PluginInfo, which is used to provide
 	 * SoundFun and users with detailed information about the plugin.
+	 * 
+	 * This is the entry point for every instance a plugin
+	 * that is spawned in SoundFun.
 	 */
 	public PluginInfo setup();
-	
-	/*
-	 * Called when a UI widget event occurs.
-	 * Only holds a single UI widget event.
-	 * widgetName provides the widget at which
-	 * the event occurred. From here it is the
-	 * plugin's responsibility to retrieve information
-	 * from the UI on the state of the widget.
-	 */
-	public boolean update(String widgetName);
 }
