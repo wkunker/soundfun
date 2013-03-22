@@ -3,6 +3,7 @@ package soundfun.core;
 import java.util.ArrayList;
 import soundfun.plugins.PluginContainer;
 import soundfun.plugins.PluginManager;
+import soundfun.sound.SoundManager;
 import soundfun.ui.UIManager;
 
 /*
@@ -13,6 +14,7 @@ public class SoundFun {
 		try {
 			UIManager mUIManager = UIManager.getSingleton();		
 			PluginManager mPluginManager = PluginManager.getSingleton();
+			SoundManager.getSingleton(); // Initialize the SoundManager.
 			
 			ArrayList<PluginContainer> plugins = mPluginManager.getLoadedPlugins();
 			

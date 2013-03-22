@@ -10,6 +10,7 @@ public class PipeContainer {
 	private Element mDecodeBin = null;
 	private Element mAudioConvert = null;
 	private Element mAudioResample = null;
+	private Element mVolume = null;
 	
 	public PipeContainer() {}
 	
@@ -29,6 +30,10 @@ public class PipeContainer {
 		mAudioResample = audioResample;
 	}
 	
+	public void setVolume(Element volume) {
+		mVolume = volume;
+	}
+	
 	public Element getFileSrc() {
 		return mFileSrc;
 	}
@@ -43,5 +48,9 @@ public class PipeContainer {
 	
 	public Element getAudioResample() {
 		return mAudioResample;
+	}
+	
+	public Element getVolume() {
+		return mVolume;
 	}
 }

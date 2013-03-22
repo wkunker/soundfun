@@ -9,6 +9,11 @@ import soundfun.ui.Panel;
  * returned from the setup() method in the plugin to SoundFun.
  */
 public class PluginInfo {
+	private String mLastAssignedButton = null;
+	private ArrayList<Action> mActions = new ArrayList<Action>();
+	private String mTitle = "";
+	private soundfun.ui.Panel mPanel;
+	
 	public PluginInfo() {}
 	
 	public PluginInfo(PluginInfo copy) throws CloneNotSupportedException {
@@ -16,13 +21,9 @@ public class PluginInfo {
 		this.mPanel = (Panel) copy.clone();
 	}
 	
-	private soundfun.ui.Panel mPanel;
-	
 	/*
 	 * Title of the plugin as seen by the user.
 	 */
-	private String mTitle = "";
-	
 	public void setTitle(String title) {
 		mTitle = title;
 	}
@@ -38,9 +39,6 @@ public class PluginInfo {
 	public void setPanel(soundfun.ui.Panel panel) {
 		this.mPanel = panel;
 	}
-	
-	private String mLastAssignedButton = null;
-	private ArrayList<Action> mActions = new ArrayList<Action>();
 	
 	/*
 	 * Set which button this instance of
@@ -64,6 +62,7 @@ public class PluginInfo {
 	 */
 	public void registerAction(Action a) {
 		mActions.add(a);
+		
 	}
 	
 	/*
