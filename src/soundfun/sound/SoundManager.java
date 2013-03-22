@@ -85,9 +85,13 @@ public class SoundManager {
 	}
 	
 	/*
+	 * Adds a "pipe" to the gstreamer pipeline.
+	 * Not recommended to use this method.
+	 * 
 	 * decodebin, filesrc, audioconvert, and audioresample can all
 	 * be accessed via the returend PipeContainer object.
 	 */
+	@Deprecated
 	public PipeContainer createAndAddPipeToPipeline(String filePath) throws Exception {
 		if(!addSampleToPipelineHasBeenCalled) {
 			mPipe = Pipeline.launch("filesrc name=filesrc0 ! decodebin name=decodebin0 ! audioconvert name=audioconvert0 ! audioresample name=audioresample0 ! volume name=volume0 ! adder name=mixadder ! alsasink name=mainsink sync=false ! mixadder");
