@@ -3,10 +3,8 @@ package soundfun.sound;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gstreamer.Bin;
 import org.gstreamer.Element;
 import org.gstreamer.ElementFactory;
-import org.gstreamer.GhostPad;
 import org.gstreamer.Gst;
 import org.gstreamer.Pad;
 import org.gstreamer.Pipeline;
@@ -51,6 +49,7 @@ public class SoundManager {
 		}
 	}
 	
+	@Deprecated
 	public void removePipeFromPipeline(PipeContainer c) {
 		Pad audioResampleSrcPad = c.getAudioResample().getPad("src");
 		Pad adderSinkPad = audioResampleSrcPad.getPeer();
@@ -61,6 +60,7 @@ public class SoundManager {
 		getAdder().releaseRequestPad(adderSinkPad);
 	}
 	
+	@Deprecated
 	public void addPipeToPipeline(PipeContainer c) throws Exception {
 		Pad audioResampleSrcPad = c.getAudioResample().getPad("src");
 		audioResampleSrcPad.link(createAdderSinkPad());
@@ -70,6 +70,7 @@ public class SoundManager {
 	/*
 	 * Creates a new sinkpad for linking another src to the mix.
 	 */
+	@Deprecated
 	public Pad createAdderSinkPad() throws Exception {
 		Pad pad = null;
 		pad = mPipe.getElementByName("mixadder").getRequestPad("sink%d");

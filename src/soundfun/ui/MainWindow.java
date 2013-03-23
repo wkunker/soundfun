@@ -16,7 +16,7 @@ public class MainWindow {
 	// The three visible panels as the user knows them.
 	private Panel mButtonPanel = new Panel(new MigLayout("fill"));
 	private Panel mActionPanel = new Panel(new MigLayout("fill"));
-	private Panel mActionDetailsPanel = new Panel();
+	private Panel mActionDetailsPanel = new Panel(new MigLayout("fill"));
 	
 	/*
 	 * Listbox for the Action panel.
