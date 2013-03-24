@@ -89,7 +89,7 @@ public class MainWindow {
     	 * manipulated by whichever plugin is currently selected.
     	 * mActionDetailsPanel should fill mBottomPanel.
     	 */
-    	mBottomPanel.add(mActionDetailsPanel, "w 100%, h 100%, grow");
+    	mBottomPanel.add(mActionDetailsPanel, "w 100%, h 100%, grow 100");
     	
     	
     	mButtonPanel.add(mButtonListPanel);
@@ -214,7 +214,7 @@ public class MainWindow {
     	// set it to be a child, and set it as visible/enabled.
     	if(!found) {
     		
-    		mActionDetailsPanel.add(panel);
+    		mActionDetailsPanel.add(panel, "w 100%, h 100%");
     		panel.setVisible(true);
     		panel.setEnabled(true);
     	}
