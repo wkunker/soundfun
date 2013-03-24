@@ -205,6 +205,8 @@ public class MainWindow {
     			found = true;
     			c.setVisible(true);
     			c.setEnabled(true);
+    		} else {
+    			mActionDetailsPanel.remove(c);
     		}
     	}
     	
@@ -219,6 +221,6 @@ public class MainWindow {
     	
     	// Restore validity.
     	mMainWindowFrame.validate();
-    	mMainWindowFrame.repaint(50L);
+    	//mMainWindowFrame.repaint(50L);
     }
 }
