@@ -5,6 +5,7 @@ import soundfun.plugins.PluginContainer;
 import soundfun.plugins.PluginManager;
 import soundfun.sound.SoundManager;
 import soundfun.ui.UIManager;
+import soundfun.util.Log;
 
 /*
  * Main entry point for the SoundFun application.
@@ -12,6 +13,7 @@ import soundfun.ui.UIManager;
 public class SoundFun {
 	public static void main(String []args) {
 		try {
+			Log.logMessage("Starting SoundFun...");
 			UIManager mUIManager = UIManager.getSingleton();		
 			PluginManager mPluginManager = PluginManager.getSingleton();
 			SoundManager.getSingleton(); // Initialize the SoundManager.

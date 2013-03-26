@@ -9,6 +9,19 @@ public class Globals {
 	 */
 	public static final long API_VERSION = 1L;
 	
+	/*
+	 * Enables/disables extra code helpful to finding problems
+	 * and ensuring consistency throughout the program.
+	 * 
+	 * True for debug enabled, false for debug disabled.
+	 */
+	public static final boolean DEBUG_ENABLED = true;
+	
+	/*
+	 * Log file location.
+	 */
+	public static final String LOG_FILE = "log";
+	
 	public static final long autoIncrement() {
 		return mAutoIncrement++;
 	}

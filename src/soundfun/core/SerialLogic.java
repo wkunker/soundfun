@@ -111,6 +111,8 @@ public class SerialLogic implements SerialInterface {
 			i.setLastAssignedButton("Button C");
 			i.actionCalled("buttonPressed");
 			lastCPressed = true;
+		} else {
+			Log.logErrorMessage("Unknown signal was sent from serial... This is likely a bug in the serial communication.");
 		}
 	}
 }
