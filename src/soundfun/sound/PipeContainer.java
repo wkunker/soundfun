@@ -5,6 +5,7 @@ import org.gstreamer.Element;
 /*
  * Represents a "pipe," or a segment of the pipeline.
  */
+@Deprecated
 public class PipeContainer {
 	private Element mFileSrc = null;
 	private Element mDecodeBin = null;

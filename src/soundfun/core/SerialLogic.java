@@ -6,6 +6,10 @@ import soundfun.util.Log;
 
 /*
  * Looks for all serial events and passes them off to the appropriate listener.
+ * 
+ * TODO Make the logic in this class more generic, then load a variable stating the number
+ * of buttons on the controller board either from a configuration file containing a list
+ * of controller boards, or from the controller board itself.
  */
 public class SerialLogic implements SerialInterface {
 	// Ensure that all serial events actually make sense, and correct as necessary.

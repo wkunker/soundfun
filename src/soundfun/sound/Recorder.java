@@ -1,5 +1,6 @@
 package soundfun.sound;
 
+import org.gstreamer.Element;
 import org.gstreamer.ElementFactory;
 import org.gstreamer.Pipeline;
 import org.gstreamer.State;
@@ -17,10 +18,18 @@ import soundfun.util.Globals;
  * contained elements.
  */
 public class Recorder extends Pipe {
-	private BusDispatcher mBusDispatcher = null;
+	
+	protected Element mAudioSrc = null;
+	protected Element mAudioConvert = null;
+	protected Element mLameEncoder = null;
+	protected Element mFileSink = null;
+	private int mBitrate;
 	
 	Recorder(String outputFile) {
+		super();
+		
 		mPipeline = new Pipeline();
+		
 		// TODO Make a more elegant solution to the incrementing "garbage"
 		mAudioSrc = ElementFactory.make("autoaudiosrc", "audio_src_" + Globals.autoIncrementAsString());
 		mAudioConvert = ElementFactory.make("audioconvert", "audio_convert_" + Globals.autoIncrementAsString());
@@ -37,8 +46,8 @@ public class Recorder extends Pipe {
     	
     	// TODO Make the default bit rate load from a configuration file.
     	setBitrate(192); // Set a default bitrate.
-
-    	/*
+		
+		/*
     	 * Initialize the bus dispatcher so plugins can access the bus more easily.
     	 */
     	mBusDispatcher = new BusDispatcher(mPipeline.getBus());
@@ -99,6 +108,7 @@ public class Recorder extends Pipe {
 	public void stop() {
 		/*
 		 * Stop the recording.
+		 * TODO Compensate for latency before stopping the recording.
 		 */
 		mPipeline.setState(State.READY);
 	}
@@ -109,5 +119,14 @@ public class Recorder extends Pipe {
 		 * Start the recording.
 		 */
 		mPipeline.setState(State.PLAYING);
+	}
+	
+	public void setBitrate(int bitrate) {
+		mLameEncoder.set("bitrate", bitrate);
+		mBitrate = bitrate;
+	}
+
+	public int getBitrate() {
+		return mBitrate;
 	}
 }
