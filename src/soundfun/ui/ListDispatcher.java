@@ -1,5 +1,7 @@
 package soundfun.ui;
 
+import soundfun.util.Dispatcher;
+
 /*
  * Used internally by the soundfun.ui package.
  */
@@ -13,11 +15,5 @@ class ListDispatcher extends Dispatcher<ListListener> implements javax.swing.eve
 	        	curListener.selected((String)l.getSelectedValue());
 	        }
 		}
-	}
-
-	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
-		
 	}
 }

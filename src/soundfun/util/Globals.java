@@ -25,4 +25,8 @@ public class Globals {
 	public static final long autoIncrement() {
 		return mAutoIncrement++;
 	}
+	
+	public static String autoIncrementAsString() {
+		return new Long(autoIncrement()).toString();
+	}
 }

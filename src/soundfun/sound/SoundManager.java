@@ -195,4 +195,12 @@ public class SoundManager {
 		mPipeContainers.add(c);
 		return c;
 	}
+	
+	/*
+	 * Creates and returns a new instance of Recorder,
+	 * which handles most desired recording functionality.
+	 */
+	public Recorder createRecorder(String outputFile) {
+		return new Recorder(outputFile);
+	}
 }
