@@ -21,6 +21,7 @@ public class Recorder extends Pipe {
 	
 	Recorder(String outputFile) {
 		mPipeline = new Pipeline();
+		// TODO Make a more elegant solution to the incrementing "garbage"
 		mAudioSrc = ElementFactory.make("autoaudiosrc", "audio_src_" + Globals.autoIncrementAsString());
 		mAudioConvert = ElementFactory.make("audioconvert", "audio_convert_" + Globals.autoIncrementAsString());
 		mLameEncoder = ElementFactory.make("lame", "lame_encoder_" + Globals.autoIncrementAsString());
@@ -33,6 +34,8 @@ public class Recorder extends Pipe {
     	mAudioConvert.link(mLameEncoder);
     	mLameEncoder.link(mFileSink);
     	mFileSink.set("location", outputFile);
+    	
+    	// TODO Make the default bit rate load from a configuration file.
     	setBitrate(192); // Set a default bitrate.
 
     	/*
