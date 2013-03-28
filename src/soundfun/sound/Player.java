@@ -73,8 +73,8 @@ public class Player extends Pipe {
 	 */
 	@Override
 	public void stop() {
-		mPipeline.seek(0, TimeUnit.MILLISECONDS);
 		mPipeline.setState(State.PAUSED);
+		mPipeline.seek(0, TimeUnit.MILLISECONDS);
 	}
 
 	@Override

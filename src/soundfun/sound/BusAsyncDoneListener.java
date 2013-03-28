@@ -5,15 +5,15 @@ import org.gstreamer.GstObject;
 
 import soundfun.sound.BusDispatcher;
 
-public class BusEosListener implements Bus.EOS {
+public class BusAsyncDoneListener implements Bus.ASYNC_DONE {
 	BusDispatcher mBusDispatcher = null;
 	
-	public BusEosListener(BusDispatcher BusDispatcher) {
+	public BusAsyncDoneListener(BusDispatcher BusDispatcher) {
 		mBusDispatcher = BusDispatcher;
 	}
 
 	@Override
-	public void endOfStream(GstObject arg0) {
-		mBusDispatcher.endOfStream(arg0);
+	public void asyncDone(GstObject source) {
+		mBusDispatcher.asyncDone(source);
 	}
 }
