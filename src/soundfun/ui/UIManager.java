@@ -67,4 +67,24 @@ public class UIManager {
 		
 		return mSingleton;
 	}
+	
+	public Label createLabel(String text) {
+		return new Label(text);
+	}
+	
+	public Label createLabel() {
+		return new Label();
+	}
+	
+	public RadioButton createRadioButton(EventListener listener) {
+		return new RadioButton(listener);
+	}
+	
+	public soundfun.ui.ButtonGroup createButtonGroup() {
+		return new soundfun.ui.ButtonGroup();
+	}
+	
+	public FileChooser createFileChooser() {
+		return new FileChooser();
+	}
 }
