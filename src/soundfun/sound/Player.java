@@ -84,4 +84,8 @@ public class Player extends Pipe {
 		 */
 		mPipeline.setState(State.PLAYING);
 	}
+	
+	public void seekToBeginning() {
+		mPipeline.seek(0, TimeUnit.MILLISECONDS);
+	}
 }

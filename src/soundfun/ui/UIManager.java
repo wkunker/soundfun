@@ -87,4 +87,8 @@ public class UIManager {
 	public FileChooser createFileChooser() {
 		return new FileChooser();
 	}
+	
+	public CheckBox createCheckBox(EventListener listener) {
+		return new CheckBox(listener);
+	}
 }
