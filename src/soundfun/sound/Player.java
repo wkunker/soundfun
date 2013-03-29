@@ -21,11 +21,9 @@ public class Player extends Pipe {
 		
 		mPipeline = new Pipeline();
 		
-		PlayBin2 playbin = new PlayBin2(name);
-		mPipeline.add(playbin);
-		mPlayBin = playbin;
+		mPlayBin = new PlayBin2(name);
 		
-		// TODO Make a more elegant solution to the incrementing "garbage"
+		mPipeline.add(mPlayBin);
 		
     	mPlayBin.setInputFile(new File(inputFile));
     	
@@ -79,13 +77,21 @@ public class Player extends Pipe {
 
 	@Override
 	public void start() {
-		/*
-		 * Start the recording.
-		 */
 		mPipeline.setState(State.PLAYING);
 	}
 	
 	public void seekToBeginning() {
 		mPipeline.seek(0, TimeUnit.MILLISECONDS);
+	}
+	
+	public void pause() {
+		mPipeline.setState(State.PAUSED);
+	}
+	
+	public void setMute(boolean mute) {
+		if(mute)
+			mPlayBin.set("mute", true);
+		else
+			mPlayBin.set("mute", false);
 	}
 }

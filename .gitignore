@@ -1,5 +1,9 @@
 *.class
 
+# SoundFun #
+*.mp3
+log
+
 # Package Files #
 *.jar
 *.war
