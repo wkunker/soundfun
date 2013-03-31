@@ -1,0 +1,78 @@
+<!--
+    Ant standard build file
+    @date       2012-03-01
+    @author     tane graf, Denny Kunker
+-->
+<project default="distrib">
+    <!-- Description -->
+    <description>
+        SoundFun build file
+    </description>
+    <!-- Global properties -->
+    <property name="src" value="src"/>
+    <property name="build" location="build"/>
+    <property name="dist" value="dist"/>
+    <property name="docs" value="docs"/>
+    <property name="jarfile" value="soundfun.jar"/>
+	<property name="libdir" value="libs"/>
+	<property name="mainclass" value="soundfun.core.SoundFun"/>
+	
+	<path id="libclasspath">
+		<fileset dir="${libdir}" includes="**/*.jar"/>
+	</path>
+
+    <!-- Initialization -->
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+    </target>
+
+    <!-- Compilation -->
+    <target name="compile" depends="init" description="compile the source">
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac srcdir="${src}" destdir="${build}" classpathref="libclasspath" includeantruntime="false"/>
+    </target>
+    
+    <!-- Distribution -->
+    <target name="distrib" depends="compile" description="generate the distribution">
+        <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+        <jar destfile="${jarfile}" basedir="${build}">
+            <manifest>
+                <attribute name="Main-Class" value="${mainclass}"/>
+            </manifest>
+        </jar>
+    	
+    	<move file="${jarfile}" tofile="${build}/${jarfile}"/>
+    </target>
+
+	<!-- Generate documentation -->
+    <target name="doc" description="generates documentation">
+        <javadoc destdir="${docs}/api" author="true" version="true" use="true" windowtitle="OJL API" sourcepath="${src}">
+            <doctitle><![CDATA[<h1>SoundFun</h1>]]></doctitle>
+            <bottom><![CDATA[<i>Copyright &#169; 2013 Denny Kunker</i>]]></bottom>
+            <tag name="todo" scope="all" description="To do:"/>
+            <!--group title="Group 1 Packages" packages="com.dummy.test.a*"/>
+            <group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/-->
+            <link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="C:\tmp"/>
+            <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+        </javadoc>
+    </target>
+	
+	<!-- Run the program -->
+	<target name="run" depends="distrib">
+		<java fork="true" classname="${mainclass}">
+			<classpath>
+				<path refid="libclasspath"/>
+				<path location="${build}/${jarfile}"/>
+			</classpath>
+		</java>
+	</target>
+    
+    <!-- Cleaning up -->
+    <target name="clean" description="clean up">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}"/>
+    </target>
+</project>

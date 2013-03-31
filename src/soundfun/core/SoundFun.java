@@ -14,7 +14,8 @@ public class SoundFun {
 	public static void main(String []args) {
 		try {
 			Log.logMessage("Starting SoundFun...");
-			UIManager mUIManager = UIManager.getSingleton();		
+
+			UIManager mUIManager = UIManager.getSingleton();
 			PluginManager mPluginManager = PluginManager.getSingleton();
 			SoundManager.getSingleton(); // Initialize the SoundManager.
 			
