@@ -3,6 +3,7 @@
 # SoundFun #
 *.mp3
 log
+soundfun.jar
 
 # Package Files #
 *.war

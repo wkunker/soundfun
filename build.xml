@@ -14,12 +14,12 @@
     <property name="dist" value="dist"/>
     <property name="docs" value="docs"/>
     <property name="jarfile" value="soundfun.jar"/>
-	<property name="libdir" value="libs"/>
-	<property name="mainclass" value="soundfun.core.SoundFun"/>
-	
-	<path id="libclasspath">
-		<fileset dir="${libdir}" includes="**/*.jar"/>
-	</path>
+    <property name="libdir" value="libs"/>
+    <property name="mainclass" value="soundfun.core.SoundFun"/>
+
+    <path id="libclasspath">
+        <fileset dir="${libdir}" includes="**/*.jar"/>
+    </path>
 
     <!-- Initialization -->
     <target name="init">
@@ -55,20 +55,20 @@
             <tag name="todo" scope="all" description="To do:"/>
             <!--group title="Group 1 Packages" packages="com.dummy.test.a*"/>
             <group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/-->
-            <link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="C:\tmp"/>
+            <link offline="true" href="http://download.oracle.com/javase/7/docs/api/" packagelistLoc="tmp"/>
             <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
         </javadoc>
     </target>
-	
-	<!-- Run the program -->
-	<target name="run" depends="distrib">
-		<java fork="true" classname="${mainclass}">
-			<classpath>
-				<path refid="libclasspath"/>
-				<path location="${build}/${jarfile}"/>
-			</classpath>
-		</java>
-	</target>
+
+    <!-- Run the program -->
+    <target name="run" depends="distrib">
+        <java fork="true" classname="${mainclass}">
+            <classpath>
+                <path refid="libclasspath"/>
+                <path location="${build}/${jarfile}"/>
+            </classpath>
+        </java>
+    </target>
     
     <!-- Cleaning up -->
     <target name="clean" description="clean up">

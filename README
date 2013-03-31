@@ -1,3 +1,7 @@
+Prerequisites: sudo apt-get install ant git openjdk-7-jdk libjna-java librxtx-java
+
+
 Linux: must add user to dialout group for device to be recognized.
 
 usermod -aG dialout <myuser>
+
