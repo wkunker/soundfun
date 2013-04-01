@@ -3,22 +3,24 @@
     @date       2012-03-01
     @author     tane graf, Denny Kunker
 -->
-<project default="plugins">
+<project default="distrib">
     <!-- Description -->
     <description>
-        SoundFun build file
+        SoundFun plugin build file
     </description>
     <!-- Global properties -->
     <property name="src" value="src"/>
     <property name="build" location="build"/>
-    <property name="dist" value="dist"/>
     <property name="docs" value="docs"/>
-    <property name="jarfile" value="soundfun.jar"/>
-    <property name="libdir" value="libs"/>
+    <property name="jarfile" value="oneshotsampler.jar"/>
+    <property name="libdir" value="../../libs"/>
     <property name="mainclass" value="soundfun.core.SoundFun"/>
+    <property name="mainbuilddir" value="../../build"/>
+	<property name="soundfunaction" value="true"/>
 
     <path id="libclasspath">
         <fileset dir="${libdir}" includes="**/*.jar"/>
+        <fileset dir="${mainbuilddir}" includes="**/*.jar"/>
     </path>
 
     <!-- Initialization -->
@@ -44,21 +46,13 @@
             </manifest>
         </jar>
     	
-    	<move file="${jarfile}" tofile="${build}/${jarfile}"/>
+    	<move file="${jarfile}" tofile="../${jarfile}"/>
     </target>
-	
-	<!-- Build plugins -->
-	<target name="plugins" depends="distrib" description="build available plugins as found in the plugins directory.">
-		<subant target="">
-			<property name="soundfunaction" value="true"/>
-			<fileset dir="plugins" includes="*/build.xml"/>
-		</subant>
-	</target>
 
 	<!-- Generate documentation -->
     <target name="doc" description="generates documentation">
-        <javadoc destdir="${docs}/api" author="true" version="true" use="true" windowtitle="SoundFun API" sourcepath="${src}">
-            <doctitle><![CDATA[<h1>SoundFun</h1>]]></doctitle>
+        <javadoc destdir="${docs}/api" author="true" version="true" use="true" windowtitle="SoundFun plugin" sourcepath="${src}">
+            <doctitle><![CDATA[<h1>One Shot Sampler plugin for SoundFun</h1>]]></doctitle>
             <bottom><![CDATA[<i>Copyright &#169; 2013 Denny Kunker</i>]]></bottom>
             <tag name="todo" scope="all" description="To do:"/>
             <!--group title="Group 1 Packages" packages="com.dummy.test.a*"/>
@@ -67,31 +61,11 @@
             <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
         </javadoc>
     </target>
-
-    <!-- Run the program -->
-    <target name="run" depends="plugins">
-        <java fork="true" classname="${mainclass}">
-            <classpath>
-                <path refid="libclasspath"/>
-                <path location="${build}/${jarfile}"/>
-            </classpath>
-        </java>
-    </target>
     
     <!-- Cleaning up -->
     <target name="clean" description="clean up">
-        <!-- Delete the ${build} and ${dist} directory trees -->
-    	<delete file="log"/>
+        <!-- Delete the ${build} directory tree -->
         <delete dir="${build}"/>
-        <delete dir="${docs}"/>
-		<delete>
-	        <!-- Delete mp3 files from current directory only -->
-	        <fileset dir="." includes="*.mp3"/>
-        </delete>
-    	
-    	<subant target="clean">
-			<property name="soundfunaction" value="true"/>
-			<fileset dir="plugins" includes="*/build.xml"/>
-		</subant>
+    	<delete file="../${jarfile}"/>
     </target>
 </project>
