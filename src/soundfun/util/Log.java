@@ -41,8 +41,8 @@ public class Log {
 		}
 	}
 	
-	public static void logDebugMessage(String msg) {
-		msg = "Debug: " + msg;
+	public static void logDebugMessage(Object o, String msg) {
+		msg = "Debug: (" + o.getClass().getName() + ")" + msg;
 		
 		if(Globals.DEBUG_ENABLED) {
 			System.out.println(msg);

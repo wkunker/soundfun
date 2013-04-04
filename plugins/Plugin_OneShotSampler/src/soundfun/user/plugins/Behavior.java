@@ -152,7 +152,7 @@ public class Behavior implements Action, BusListener {
 	 */
 	@Override
 	public void serialEvent(String evt) {
-		soundfun.util.Log.logDebugMessage("serialEvent(evt) start... evt: " + evt);
+		soundfun.util.Log.logDebugMessage(this, "serialEvent(evt) start... evt: " + evt);
 		if(evt.equals("buttonPressed")) {
 			/*****************
 			 * Button pressed
@@ -245,7 +245,7 @@ public class Behavior implements Action, BusListener {
 				}
 	            	
 	            mChosenSampleFile.setText("Currently loaded sample: " + file.getAbsolutePath());
-	            soundfun.util.Log.logDebugMessage("Currently loaded sample: " + file.getAbsolutePath());
+	            soundfun.util.Log.logDebugMessage(this, "Currently loaded sample: " + file.getAbsolutePath());
 	            
 	            try {
 	            	/*
@@ -328,19 +328,19 @@ public class Behavior implements Action, BusListener {
         	}
         } else if(actionCommand.equals("radioButton_startOverOnRelease")) {
         	releaseMode = "radioButton_startOverOnRelease";
-        	Log.logDebugMessage("radioButton_startOverOnRelease");
+        	Log.logDebugMessage(this, "radioButton_startOverOnRelease");
         } else if(actionCommand.equals("radioButton_pauseOnRelease")) {
         	releaseMode = "radioButton_pauseOnRelease";
-        	Log.logDebugMessage("radioButton_pauseOnRelease");
+        	Log.logDebugMessage(this, "radioButton_pauseOnRelease");
         } else if(actionCommand.equals("radioButton_muteOnRelease")) {
         	releaseMode = "radioButton_muteOnRelease";
-        	Log.logDebugMessage("radioButton_muteOnRelease");
+        	Log.logDebugMessage(this, "radioButton_muteOnRelease");
         }
 	}
 	
 	@Override
 	public void durationChanged(GstObject arg0, Format arg1, long arg2) {
-		Log.logDebugMessage("durationChanged " + new Long(arg2).toString());
+		Log.logDebugMessage(this, "durationChanged " + new Long(arg2).toString());
 		
 		if(mPlayer.getGstPipeline().equals(arg0.getParent().getParent().getParent().getParent())) {
 			// This tells which GStreamer object had the duration change.
@@ -349,7 +349,7 @@ public class Behavior implements Action, BusListener {
 
 	@Override
 	public void endOfStream(GstObject arg0) {
-		Log.logDebugMessage("endOfStream... objectName: " + arg0.getName());
+		Log.logDebugMessage(this, "endOfStream... objectName: " + arg0.getName());
 		
 		// Loop the stream, if it's enabled.
 		if(bLoopAtEos)
@@ -358,51 +358,51 @@ public class Behavior implements Action, BusListener {
 
 	@Override
 	public void segmentStart(GstObject source, Format format, long position) {
-		Log.logDebugMessage("segmentStart position: " + new Long(position).toString());
+		Log.logDebugMessage(this, "segmentStart position: " + new Long(position).toString());
 	}
 
 	@Override
 	public void asyncDone(GstObject source) {
-		Log.logDebugMessage("asyncDone... sourceName: " + source.getName());
+		Log.logDebugMessage(this, "asyncDone... sourceName: " + source.getName());
 	}
 
 	@Override
 	public void segmentDone(GstObject source, Format format, long position) {
-		Log.logDebugMessage("segmentDone... position: " + new Long(position).toString());
+		Log.logDebugMessage(this, "segmentDone... position: " + new Long(position).toString());
 	}
 
 	@Override
 	public void errorMessage(GstObject source, int code, String message) {
-		Log.logDebugMessage("errorMessage: " + message);
+		Log.logDebugMessage(this, "errorMessage: " + message);
 	}
 
 	@Override
 	public void infoMessage(GstObject source, int code, String message) {
-		Log.logDebugMessage("infoMessage (sourceName: " + source.getName() + "): " + message);
+		Log.logDebugMessage(this, "infoMessage (sourceName: " + source.getName() + "): " + message);
 	}
 
 	@Override
 	public void busMessage(Bus bus, Message message) {
-		Log.logDebugMessage("busMessage:" + message);
+		Log.logDebugMessage(this, "busMessage:" + message);
 	}
 
 	@Override
 	public void bufferingData(GstObject source, int percent) {
-		Log.logDebugMessage("bufferingData: " + new Integer(percent).toString() + "%");
+		Log.logDebugMessage(this, "bufferingData: " + new Integer(percent).toString() + "%");
 	}
 
 	@Override
 	public void stateChanged(GstObject source, State current) {
-		Log.logDebugMessage("stateChanged: (sourceName: " + source.getName() + ")" + current.toString());
+		Log.logDebugMessage(this, "stateChanged: (sourceName: " + source.getName() + ")" + current.toString());
 	}
 
 	@Override
 	public void tagsFound(GstObject source, TagList tagList) {
-		Log.logDebugMessage("tagsFound");
+		Log.logDebugMessage(this, "tagsFound");
 	}
 
 	@Override
 	public void warningMessage(GstObject source, int code, String message) {
-		Log.logDebugMessage("warningMessage: " + message);
+		Log.logDebugMessage(this, "warningMessage: " + message);
 	}
 }

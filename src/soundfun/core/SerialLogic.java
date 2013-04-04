@@ -20,7 +20,7 @@ public class SerialLogic implements SerialInterface {
 	@Override
 	public void serialEvent(char data) {
 		if(data == 'a') {
-			Log.logDebugMessage("a");
+			Log.logDebugMessage(this, "a");
 			
 			if(!lastAPressed) { // Probably a sensitive button release or similar.
 				// Try to correct it by calling a button press first.
@@ -36,7 +36,7 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonReleased");
 			lastAPressed = false;
 		} else if(data == 'A') {
-			Log.logDebugMessage("A");
+			Log.logDebugMessage(this, "A");
 			
 			if(lastAPressed) { // Probably a sensitive button press or similar.
 				// Try to correct it by calling a button press first.
@@ -52,7 +52,7 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonPressed");
 			lastAPressed = true;
 		} else if(data == 'b') {
-			Log.logDebugMessage("b");
+			Log.logDebugMessage(this, "b");
 			
 			if(!lastBPressed) { // Probably a sensitive button release or similar.
 				// Try to correct it by calling a button press first.
@@ -68,7 +68,7 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonReleased");
 			lastBPressed = false;
 		} else if(data == 'B') {
-			Log.logDebugMessage("B");
+			Log.logDebugMessage(this, "B");
 			
 			if(lastBPressed) { // Probably a sensitive button press or similar.
 				// Try to correct it by calling a button press first.
@@ -84,7 +84,7 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonPressed");
 			lastBPressed = true;
 		} else if(data == 'c') {
-			Log.logDebugMessage("c");
+			Log.logDebugMessage(this, "c");
 			
 			if(!lastCPressed) { // Probably a sensitive button release or similar.
 				// Try to correct it by calling a button press first.
@@ -100,7 +100,7 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonReleased");
 			lastCPressed = false;
 		} else if(data == 'C') {
-			Log.logDebugMessage("C");
+			Log.logDebugMessage(this, "C");
 			
 			if(lastCPressed) { // Probably a sensitive button press or similar.
 				// Try to correct it by calling a button press first.

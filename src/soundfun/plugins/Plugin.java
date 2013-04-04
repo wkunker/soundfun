@@ -10,7 +10,7 @@ package soundfun.plugins;
  * when the program starts. setup() is called upon plugin load.
  * update() is called whenever a UI event occurs.
  */
-public interface Plugin extends net.xeoh.plugins.base.Plugin {	
+public interface Plugin extends net.xeoh.plugins.base.Plugin {
 	/*
 	 * Perform initial construction of the plugin.
 	 * Returns an instance of PluginInfo, which is used to provide
