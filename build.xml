@@ -56,7 +56,7 @@
 	</target>
 
 	<!-- Generate documentation -->
-    <target name="doc" description="generates documentation">
+    <target name="docs" description="generates documentation">
         <javadoc destdir="${docs}/api" author="true" version="true" use="true" windowtitle="SoundFun API" sourcepath="${src}">
             <doctitle><![CDATA[<h1>SoundFun</h1>]]></doctitle>
             <bottom><![CDATA[<i>Copyright &#169; 2013 Denny Kunker</i>]]></bottom>

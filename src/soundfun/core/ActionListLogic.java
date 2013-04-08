@@ -92,7 +92,7 @@ public class ActionListLogic implements soundfun.ui.ListListener {
 					UIManager.getSingleton().getMainWindow().setActionDetailsPanel(
 					clone.getPanel());
 					hist.put(StateManager.getSingleton().getSelectedButton() + "::" + actionName, clone);
-					soundfun.util.Log.logDebugMessage(this, "Adding history... " + StateManager.getSingleton().getSelectedButton() + "::" + actionName);
+					soundfun.util.Log.logDbgMsg(this, "Adding history... " + StateManager.getSingleton().getSelectedButton() + "::" + actionName);
 					
 					return;
 				}

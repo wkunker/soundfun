@@ -1,4 +1,4 @@
-package soundfun.tests;
+package soundfun.serial;
 
 import soundfun.serial.SerialInterface;
 import soundfun.util.Log;

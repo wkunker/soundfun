@@ -1,6 +1,7 @@
 package soundfun.serial;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Central class for performing serial operations with the device.
@@ -9,33 +10,42 @@ public class SerialManager {
 	// Singleton instance.
 	private static SerialManager mSingleton = null;
 	
-	// Listeners which form the "signals" of the MVC.
-	private Vector<SerialInterface> mSerialInterfaces = null;
+	// Listeners which capture the serial signals.
+	private List<SerialInterface> mSerialInterfaces = null;
 
 	// Communicates with the serial device.
-	private SerialListener mSerialListener = null;
+	private SerialDeviceListener mSerialListener = null;
+        
+        private List<String> mPorts = null;
 	
 	/*
 	 * Constructor.
 	 * Private accessor is part of Singleton pattern.
 	 */
 	private SerialManager() {
-		mSerialInterfaces = new Vector<SerialInterface>();
-		
-		Vector<String> portNames = new Vector<String>();
-		portNames.add("/dev/tty.usbserial-A9007UX1"); // Mac OS X
-		portNames.add("/dev/ttyUSB0"); // Linux
-		portNames.add("/dev/ttyACM0"); // Linux
-		portNames.add("COM3"); // Windows
-		mSerialListener = new SerialListener(portNames, 2000, 9600);
-	}
+		mSerialInterfaces = new ArrayList<>();
+                mPorts = new ArrayList<>();
+        }
+        
+        /*
+         * Creates a new instance of SerialOptions, which allows
+         * the serial communications to be customized as desired,
+         * without causing inconveniently large dependency injection.
+         * 
+         * The SerialOptions instance generated here is meant to be
+         * immutable, and should be destroyed when it's no longer in use.
+         */
+        public SerialOptions createSerialOptions() {
+            return new SerialOptions();
+        }
 	
 	/*
 	 * Returns the only possible instance of SerialManager.
 	 */
 	public static SerialManager getSingleton() {
-		if(mSingleton == null)
+		if(mSingleton == null) {
 			mSingleton = new SerialManager();
+                }
 		
 		return mSingleton;
 	}
@@ -54,29 +64,43 @@ public class SerialManager {
 	 * Silent on success, Exception thrown on failure.
 	 */
 	public void removeSerialInterface(SerialInterface i) throws Exception {
-		if(!mSerialInterfaces.remove(i))
-			throw new Exception("Unable to remove specified SerialInterface implementation from SerialManager signal list since it does not exist.");
+		if(!mSerialInterfaces.remove(i)) {
+                    throw new Exception("Unable to remove specified SerialInterface implementation from SerialManager signal list since it does not exist.");
+                }
 	}
 	
 	/*
 	 * Processes a serial event sent from inside of the soundfun.serial package.
 	 */
 	void _serialEvent(char data) {
-		for(int i = 0; i < mSerialInterfaces.size(); i++) {
-			// Pass the signal to any connected serial interfaces.
-			mSerialInterfaces.get(i).serialEvent(data);
-		}
+            for(int i = 0; i < mSerialInterfaces.size(); i++) {
+                // Pass the signal to any connected serial interfaces.
+                mSerialInterfaces.get(i).serialEvent(data);
+            }
 	}
+        
+        /*
+         * Processes a serial connection event from inside the soundfun.serial package.
+         */
+        void _serialConnection(boolean connected) {
+            for(int i = 0; i < mSerialInterfaces.size(); i++) {
+                // Pass the signal to any connected serial interfaces.
+                mSerialInterfaces.get(i).serialConnection(connected);
+            }
+        }
 	
 	/*
 	 * Start the serial listener. This will attempt to open the port
 	 * and begin communication with the serial device.
 	 */
-	public void startSerialListener() {
-		mSerialListener.initialize();
+	public void startSerialListener(SerialOptions options) throws Exception {
+            mSerialListener = new SerialDeviceListener();
+            mSerialListener.initialize(options);
 	}
 	
 	public void stopSerialListener() {
-		mSerialListener.close();
+            if(mSerialListener != null) {
+                mSerialListener.close();
+            }
 	}
 }

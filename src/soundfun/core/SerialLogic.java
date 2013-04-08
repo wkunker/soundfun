@@ -20,11 +20,11 @@ public class SerialLogic implements SerialInterface {
 	@Override
 	public void serialEvent(char data) {
 		if(data == 'a') {
-			Log.logDebugMessage(this, "a");
+			Log.logDbgMsg(this, "a");
 			
 			if(!lastAPressed) { // Probably a sensitive button release or similar.
 				// Try to correct it by calling a button press first.
-				Log.logMessage("A was released twice in a row. Correcting...");
+				Log.logMsg("A was released twice in a row. Correcting...");
 				
 				PluginInfo i = StateManager.getSingleton().getCurrentStates().get("Button A");
 				i.setLastAssignedButton("Button A");
@@ -36,11 +36,11 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonReleased");
 			lastAPressed = false;
 		} else if(data == 'A') {
-			Log.logDebugMessage(this, "A");
+			Log.logDbgMsg(this, "A");
 			
 			if(lastAPressed) { // Probably a sensitive button press or similar.
 				// Try to correct it by calling a button press first.
-				Log.logMessage("A was pressed twice in a row. Correcting...");
+				Log.logMsg("A was pressed twice in a row. Correcting...");
 				
 				PluginInfo i = StateManager.getSingleton().getCurrentStates().get("Button A");
 				i.setLastAssignedButton("Button A");
@@ -52,11 +52,11 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonPressed");
 			lastAPressed = true;
 		} else if(data == 'b') {
-			Log.logDebugMessage(this, "b");
+			Log.logDbgMsg(this, "b");
 			
 			if(!lastBPressed) { // Probably a sensitive button release or similar.
 				// Try to correct it by calling a button press first.
-				Log.logMessage("B was released twice in a row. Correcting...");
+				Log.logMsg("B was released twice in a row. Correcting...");
 				
 				PluginInfo i = StateManager.getSingleton().getCurrentStates().get("Button B");
 				i.setLastAssignedButton("Button B");
@@ -68,11 +68,11 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonReleased");
 			lastBPressed = false;
 		} else if(data == 'B') {
-			Log.logDebugMessage(this, "B");
+			Log.logDbgMsg(this, "B");
 			
 			if(lastBPressed) { // Probably a sensitive button press or similar.
 				// Try to correct it by calling a button press first.
-				Log.logMessage("B was pressed twice in a row. Correcting...");
+				Log.logMsg("B was pressed twice in a row. Correcting...");
 				
 				PluginInfo i = StateManager.getSingleton().getCurrentStates().get("Button B");
 				i.setLastAssignedButton("Button B");
@@ -84,11 +84,11 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonPressed");
 			lastBPressed = true;
 		} else if(data == 'c') {
-			Log.logDebugMessage(this, "c");
+			Log.logDbgMsg(this, "c");
 			
 			if(!lastCPressed) { // Probably a sensitive button release or similar.
 				// Try to correct it by calling a button press first.
-				Log.logMessage("C was released twice in a row. Correcting...");
+				Log.logMsg("C was released twice in a row. Correcting...");
 				
 				PluginInfo i = StateManager.getSingleton().getCurrentStates().get("Button C");
 				i.setLastAssignedButton("Button C");
@@ -100,11 +100,11 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonReleased");
 			lastCPressed = false;
 		} else if(data == 'C') {
-			Log.logDebugMessage(this, "C");
+			Log.logDbgMsg(this, "C");
 			
 			if(lastCPressed) { // Probably a sensitive button press or similar.
 				// Try to correct it by calling a button press first.
-				Log.logMessage("C was pressed twice in a row. Correcting...");
+				Log.logMsg("C was pressed twice in a row. Correcting...");
 				
 				PluginInfo i = StateManager.getSingleton().getCurrentStates().get("Button C");
 				i.setLastAssignedButton("Button C");
@@ -116,7 +116,16 @@ public class SerialLogic implements SerialInterface {
 			i.actionCalled("buttonPressed");
 			lastCPressed = true;
 		} else {
-			Log.logErrorMessage("Unknown signal was sent from serial... This is likely a bug in the serial communication.");
+			Log.logErrMsg("Unknown signal was sent from serial... This is likely a bug in the serial communication.");
 		}
 	}
+
+    @Override
+    public void serialConnection(boolean connected) {
+        if(connected) {
+            Log.logMsg("Serial connected.");
+        } else {
+            Log.logMsg("Serial could not connect.");
+        }
+    }
 }

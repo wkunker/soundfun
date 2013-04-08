@@ -5,9 +5,12 @@ import soundfun.ui.EventListener;
 public class ButtonPressListener implements EventListener {
 	Behavior mActionListener = null;
 	
-	public ButtonPressListener(Behavior p) {
-		mActionListener = p;
+	public ButtonPressListener() {
 	}
+        
+        public void registerBehavior(Behavior behavior) {
+            mActionListener = behavior;
+        }
 
 	@Override
 	public void actionPerformed(String actionCommand) {

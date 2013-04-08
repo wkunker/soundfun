@@ -67,7 +67,7 @@ public class StateManager {
 	}
 	
 	public String getSelectedButton() {
-		soundfun.util.Log.logDebugMessage(this, mSelectedButton + "::" + getCurrentStates().get(mSelectedButton).getTitle());
+		soundfun.util.Log.logDbgMsg(this, mSelectedButton + "::" + getCurrentStates().get(mSelectedButton).getTitle());
 		return mSelectedButton;
 	}
 	

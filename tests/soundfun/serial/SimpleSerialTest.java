@@ -1,8 +1,7 @@
-package soundfun.tests;
+package soundfun.serial;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import soundfun.serial.SerialOptions;
 
 /*
  * Basic test of the serial interface.
@@ -12,8 +11,8 @@ public class SimpleSerialTest {
 
 	public static void test() {
 		// Initialize the SerialManager class.
-		soundfun.serial.SerialManager sm =
-				soundfun.serial.SerialManager.getSingleton();
+		SerialManager sm =
+				SerialManager.getSingleton();
 		
 		SimpleSerialTestInterface i = new SimpleSerialTestInterface();
 		sm.addSerialInterface(i);
@@ -29,5 +28,4 @@ public class SimpleSerialTest {
 	public static void main(String[] args) throws Exception {
 		test();
 	}
-
 }

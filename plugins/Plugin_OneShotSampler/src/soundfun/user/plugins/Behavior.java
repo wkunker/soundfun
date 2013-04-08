@@ -1,6 +1,8 @@
 package soundfun.user.plugins;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gstreamer.Bus;
 import org.gstreamer.Format;
@@ -26,8 +28,10 @@ import soundfun.ui.ButtonGroup;
 /*
  * A plugin can often be written just by modifying this class.
  * This controls the overall behavior of the plugin.
+ * 
+ * For safety reasons, this class should not be extended.
  */
-public class Behavior implements Action, BusListener {
+public final class Behavior implements Action, BusListener {
 	private DataContainer mDataContainer = null;
 	private Label mChosenSampleFile = null;
 	private Player mPlayer = null;
@@ -44,106 +48,125 @@ public class Behavior implements Action, BusListener {
 	String releaseMode = null;
 	
 	public Behavior(soundfun.plugins.PluginInfo pluginInfo, DataContainer dataContainer) {
-		mDataContainer = dataContainer;
-		
-		recorderArmed = false;
-		
-		pluginInfo.setTitle("One Shot Sampler");
-		pluginInfo.setPanel(mDataContainer.getPanel());
-		
-		// Main button press listener.
-		ButtonPressListener buttonListener = new ButtonPressListener(this);
-		
-		/********** General UI ********/
-		// Description label... Basic instructions for end-user.
-		Label label_description = UIManager.getSingleton().createLabel();
-		label_description.setText("Simple One-shot sampler. Press and hold button to play, release to stop.");
-        //mDataContainer.getPanel().add(label_description, "wrap, span 2");
-        
-        // Current clip duration. Invisible until something actually
-        long duration = 0;
-        mPlayBinDuration = UIManager.getSingleton().createLabel("Recording duration: " + new Long(duration).toString());
-        //mDataContainer.getPanel().add(mPlayBinDuration);
-        mPlayBinDuration.setVisible(false);
-        
-        // Description
-        mDataContainer.getPanel().add(label_description, "spanx 4, wrap");
-        
-        // Radio button to choose loading of files.
-        ButtonGroup mainFunctions = UIManager.getSingleton().createButtonGroup();
-        RadioButton radioMp3 = UIManager.getSingleton().createRadioButton(buttonListener);
-        radioMp3.setText("MP3 File");
-        mDataContainer.getPanel().add(radioMp3);
-        mainFunctions.add(radioMp3);
-        radioMp3.setActionCommand("radioMp3Selected");
-        
-        // Radio button to choose recording from autoaudiosrc or similar.
-        RadioButton radioRecord = UIManager.getSingleton().createRadioButton(buttonListener);
-        radioRecord.setText("Record from default microphone");
-        mDataContainer.getPanel().add(radioRecord, "wrap");
-        mainFunctions.add(radioRecord);
-        radioRecord.setActionCommand("radioRecordSelected");
-        
-        /********************* MP3 UI ********************/
-		mChosenSampleFile = UIManager.getSingleton().createLabel();
-        mChosenSampleFile.setText("Currently loaded mp3: none");
-        mDataContainer.getPanel().add(mChosenSampleFile, "spanx 2");
-		
-		// Button to choose the audio sample.
-        button_chooseSampleFile = new soundfun.ui.Button(buttonListener);
-        button_chooseSampleFile.setText("Choose sample...");
-        button_chooseSampleFile.setActionCommand("chooseSampleFile");
-        mDataContainer.getPanel().add(button_chooseSampleFile);
-        
-        /********************* Record from audio UI ********************/
-        recordButton = new ToggleButton(buttonListener);
-        recordButton.setText("Record");
-        mDataContainer.getPanel().add(recordButton, "wrap");
-        recordButton.setActionCommand("recordButton");
-        
-        
-        /******************** Options for when button is released ***********************/
-        ButtonGroup buttonReleaseOptions = UIManager.getSingleton().createButtonGroup();
-        
-        RadioButton radioButton_startOverOnRelease = UIManager.getSingleton().createRadioButton(buttonListener);
-        radioButton_startOverOnRelease.setText("Start over on release");
-        mDataContainer.getPanel().add(radioButton_startOverOnRelease);
-        buttonReleaseOptions.add(radioButton_startOverOnRelease);
-        radioButton_startOverOnRelease.setActionCommand("radioButton_startOverOnRelease");
-        radioButton_startOverOnRelease.setSelected(true);
-        releaseMode = "radioButton_startOverOnRelease";
-        
-        RadioButton radioButton_pauseOnRelease = UIManager.getSingleton().createRadioButton(buttonListener);
-        radioButton_pauseOnRelease.setText("Pause on release");
-        mDataContainer.getPanel().add(radioButton_pauseOnRelease);
-        buttonReleaseOptions.add(radioButton_pauseOnRelease);
-        radioButton_pauseOnRelease.setActionCommand("radioButton_pauseOnRelease");
-        
-        RadioButton radioButton_muteOnRelease = UIManager.getSingleton().createRadioButton(buttonListener);
-        radioButton_muteOnRelease.setText("Mute on release");
-        mDataContainer.getPanel().add(radioButton_muteOnRelease, "wrap");
-        buttonReleaseOptions.add(radioButton_muteOnRelease);
-        radioButton_muteOnRelease.setActionCommand("radioButton_muteOnRelease");
-        
-        
-        /********************* Loop at end of stream checkbox ****************************/
-        // The label
-        Label label_loopAtEOS = UIManager.getSingleton().createLabel("Loop at end of sample");
-        mDataContainer.getPanel().add(label_loopAtEOS);
-        
-        // The checkbox
-        checkbox_loopAtEos = UIManager.getSingleton().createCheckBox(buttonListener);
-        mDataContainer.getPanel().add(checkbox_loopAtEos);
-        checkbox_loopAtEos.setActionCommand("loopAtEos");
-        
-        
-        /*************** Set the default state of everything in the plugin *************/
-        mChosenSampleFile.setEnabled(false);
-    	button_chooseSampleFile.setEnabled(false);
-    	recordButton.setEnabled(false);
-    	currentMode = "";
+            mDataContainer = dataContainer;
+
+            recorderArmed = false;
+
+            pluginInfo.setTitle("One Shot Sampler");
+            pluginInfo.setPanel(mDataContainer.getPanel());
+            
+            /*
+             * NO CODE SHOULD BE PLACED BELOW THIS POINT IN THE CONSTRUCTOR.
+             */
+            try {
+                this.initialize();
+            } catch (Exception ex) {
+                Logger.getLogger(Behavior.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 	
+        /*
+         * This is where the plugin should be constructed.
+         * This won't get called until everything else in the constructor
+         * is finished.
+         */
+        public void initialize() throws Exception {
+            // Main button press listener.
+            ButtonPressListener buttonListener = new ButtonPressListener();
+
+            /********** General UI ********/
+            // Description label... Basic instructions for end-user.
+            Label label_description = UIManager.getSingleton().createLabel();
+            label_description.setText("Simple One-shot sampler. Press and hold button to play, release to stop.");
+            //mDataContainer.getPanel().add(label_description, "wrap, span 2");
+
+            // Current clip duration. Invisible until something actually
+            long duration = 0;
+            mPlayBinDuration = UIManager.getSingleton().createLabel("Recording duration: " + new Long(duration).toString());
+            //mDataContainer.getPanel().add(mPlayBinDuration);
+            mPlayBinDuration.setVisible(false);
+
+            // Description
+            mDataContainer.getPanel().add(label_description, "spanx 4, wrap");
+
+            // Radio button to choose loading of files.
+            ButtonGroup mainFunctions = UIManager.getSingleton().createButtonGroup();
+            RadioButton radioMp3 = UIManager.getSingleton().createRadioButton(buttonListener);
+            radioMp3.setText("MP3 File");
+            mDataContainer.getPanel().add(radioMp3);
+            mainFunctions.add(radioMp3);
+            radioMp3.setActionCommand("radioMp3Selected");
+
+            // Radio button to choose recording from autoaudiosrc or similar.
+            RadioButton radioRecord = UIManager.getSingleton().createRadioButton(buttonListener);
+            radioRecord.setText("Record from default microphone");
+            mDataContainer.getPanel().add(radioRecord, "wrap");
+            mainFunctions.add(radioRecord);
+            radioRecord.setActionCommand("radioRecordSelected");
+
+            /********************* MP3 UI ********************/
+                    mChosenSampleFile = UIManager.getSingleton().createLabel();
+            mChosenSampleFile.setText("Currently loaded mp3: none");
+            mDataContainer.getPanel().add(mChosenSampleFile, "spanx 2");
+
+                    // Button to choose the audio sample.
+            button_chooseSampleFile = new soundfun.ui.Button(buttonListener);
+            button_chooseSampleFile.setText("Choose sample...");
+            button_chooseSampleFile.setActionCommand("chooseSampleFile");
+            mDataContainer.getPanel().add(button_chooseSampleFile);
+
+            /********************* Record from audio UI ********************/
+            recordButton = new ToggleButton(buttonListener);
+            recordButton.setText("Record");
+            mDataContainer.getPanel().add(recordButton, "wrap");
+            recordButton.setActionCommand("recordButton");
+
+
+            /******************** Options for when button is released ***********************/
+            ButtonGroup buttonReleaseOptions = UIManager.getSingleton().createButtonGroup();
+
+            RadioButton radioButton_startOverOnRelease = UIManager.getSingleton().createRadioButton(buttonListener);
+            radioButton_startOverOnRelease.setText("Start over on release");
+            mDataContainer.getPanel().add(radioButton_startOverOnRelease);
+            buttonReleaseOptions.add(radioButton_startOverOnRelease);
+            radioButton_startOverOnRelease.setActionCommand("radioButton_startOverOnRelease");
+            radioButton_startOverOnRelease.setSelected(true);
+            releaseMode = "radioButton_startOverOnRelease";
+
+            RadioButton radioButton_pauseOnRelease = UIManager.getSingleton().createRadioButton(buttonListener);
+            radioButton_pauseOnRelease.setText("Pause on release");
+            mDataContainer.getPanel().add(radioButton_pauseOnRelease);
+            buttonReleaseOptions.add(radioButton_pauseOnRelease);
+            radioButton_pauseOnRelease.setActionCommand("radioButton_pauseOnRelease");
+
+            RadioButton radioButton_muteOnRelease = UIManager.getSingleton().createRadioButton(buttonListener);
+            radioButton_muteOnRelease.setText("Mute on release");
+            mDataContainer.getPanel().add(radioButton_muteOnRelease, "wrap");
+            buttonReleaseOptions.add(radioButton_muteOnRelease);
+            radioButton_muteOnRelease.setActionCommand("radioButton_muteOnRelease");
+
+
+            /********************* Loop at end of stream checkbox ****************************/
+            // The label
+            Label label_loopAtEOS = UIManager.getSingleton().createLabel("Loop at end of sample");
+            mDataContainer.getPanel().add(label_loopAtEOS);
+
+            // The checkbox
+            checkbox_loopAtEos = UIManager.getSingleton().createCheckBox(buttonListener);
+            mDataContainer.getPanel().add(checkbox_loopAtEos);
+            checkbox_loopAtEos.setActionCommand("loopAtEos");
+
+
+            /*************** Set the default state of everything in the plugin *************/
+            mChosenSampleFile.setEnabled(false);
+            button_chooseSampleFile.setEnabled(false);
+            recordButton.setEnabled(false);
+            currentMode = "";
+            
+            /**************** Register ****************/
+            buttonListener.registerBehavior(this);
+        }
+        
 	/*
 	 * (non-Javadoc)
 	 * @see soundfun.plugins.Action#serialEvent(java.lang.String)
@@ -152,7 +175,7 @@ public class Behavior implements Action, BusListener {
 	 */
 	@Override
 	public void serialEvent(String evt) {
-		soundfun.util.Log.logDebugMessage(this, "serialEvent(evt) start... evt: " + evt);
+		soundfun.util.Log.logDbgMsg(this, "serialEvent(evt) start... evt: " + evt);
 		if(evt.equals("buttonPressed")) {
 			/*****************
 			 * Button pressed
@@ -191,7 +214,7 @@ public class Behavior implements Action, BusListener {
 						e.printStackTrace();
 					}
 				} else {
-					Log.logErrorMessage("OneShotSampler: releaseMode \"" + releaseMode + "\" wasn't found when trying to release.");
+					Log.logErrMsg("OneShotSampler: releaseMode \"" + releaseMode + "\" wasn't found when trying to release.");
 				}
 			}
 			
@@ -245,7 +268,7 @@ public class Behavior implements Action, BusListener {
 				}
 	            	
 	            mChosenSampleFile.setText("Currently loaded sample: " + file.getAbsolutePath());
-	            soundfun.util.Log.logDebugMessage(this, "Currently loaded sample: " + file.getAbsolutePath());
+	            soundfun.util.Log.logDbgMsg(this, "Currently loaded sample: " + file.getAbsolutePath());
 	            
 	            try {
 	            	/*
@@ -269,6 +292,7 @@ public class Behavior implements Action, BusListener {
 				}
 	        }
         } else if(actionCommand.equals("recordButton")) {
+            try {
         	if(recordButton.isSelected() && !recorderArmed) {
         		/* 
             	 * When the record button is pushed, it's simply armed.
@@ -292,6 +316,9 @@ public class Behavior implements Action, BusListener {
         		}
         		recorderArmed = false;
         	}
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         } else if(actionCommand.equals("radioMp3Selected")) {
         	mChosenSampleFile.setEnabled(true);
         	button_chooseSampleFile.setEnabled(true);
@@ -328,19 +355,19 @@ public class Behavior implements Action, BusListener {
         	}
         } else if(actionCommand.equals("radioButton_startOverOnRelease")) {
         	releaseMode = "radioButton_startOverOnRelease";
-        	Log.logDebugMessage(this, "radioButton_startOverOnRelease");
+        	Log.logDbgMsg(this, "radioButton_startOverOnRelease");
         } else if(actionCommand.equals("radioButton_pauseOnRelease")) {
         	releaseMode = "radioButton_pauseOnRelease";
-        	Log.logDebugMessage(this, "radioButton_pauseOnRelease");
+        	Log.logDbgMsg(this, "radioButton_pauseOnRelease");
         } else if(actionCommand.equals("radioButton_muteOnRelease")) {
         	releaseMode = "radioButton_muteOnRelease";
-        	Log.logDebugMessage(this, "radioButton_muteOnRelease");
+        	Log.logDbgMsg(this, "radioButton_muteOnRelease");
         }
 	}
 	
 	@Override
 	public void durationChanged(GstObject arg0, Format arg1, long arg2) {
-		Log.logDebugMessage(this, "durationChanged " + new Long(arg2).toString());
+		Log.logDbgMsg(this, "durationChanged " + new Long(arg2).toString());
 		
 		if(mPlayer.getGstPipeline().equals(arg0.getParent().getParent().getParent().getParent())) {
 			// This tells which GStreamer object had the duration change.
@@ -349,7 +376,7 @@ public class Behavior implements Action, BusListener {
 
 	@Override
 	public void endOfStream(GstObject arg0) {
-		Log.logDebugMessage(this, "endOfStream... objectName: " + arg0.getName());
+		Log.logDbgMsg(this, "endOfStream... objectName: " + arg0.getName());
 		
 		// Loop the stream, if it's enabled.
 		if(bLoopAtEos)
@@ -358,51 +385,51 @@ public class Behavior implements Action, BusListener {
 
 	@Override
 	public void segmentStart(GstObject source, Format format, long position) {
-		Log.logDebugMessage(this, "segmentStart position: " + new Long(position).toString());
+		Log.logDbgMsg(this, "segmentStart position: " + new Long(position).toString());
 	}
 
 	@Override
 	public void asyncDone(GstObject source) {
-		Log.logDebugMessage(this, "asyncDone... sourceName: " + source.getName());
+		Log.logDbgMsg(this, "asyncDone... sourceName: " + source.getName());
 	}
 
 	@Override
 	public void segmentDone(GstObject source, Format format, long position) {
-		Log.logDebugMessage(this, "segmentDone... position: " + new Long(position).toString());
+		Log.logDbgMsg(this, "segmentDone... position: " + new Long(position).toString());
 	}
 
 	@Override
 	public void errorMessage(GstObject source, int code, String message) {
-		Log.logDebugMessage(this, "errorMessage: " + message);
+		Log.logDbgMsg(this, "errorMessage: " + message);
 	}
 
 	@Override
 	public void infoMessage(GstObject source, int code, String message) {
-		Log.logDebugMessage(this, "infoMessage (sourceName: " + source.getName() + "): " + message);
+		Log.logDbgMsg(this, "infoMessage (sourceName: " + source.getName() + "): " + message);
 	}
 
 	@Override
 	public void busMessage(Bus bus, Message message) {
-		Log.logDebugMessage(this, "busMessage:" + message);
+		Log.logDbgMsg(this, "busMessage:" + message);
 	}
 
 	@Override
 	public void bufferingData(GstObject source, int percent) {
-		Log.logDebugMessage(this, "bufferingData: " + new Integer(percent).toString() + "%");
+		Log.logDbgMsg(this, "bufferingData: " + new Integer(percent).toString() + "%");
 	}
 
 	@Override
 	public void stateChanged(GstObject source, State current) {
-		Log.logDebugMessage(this, "stateChanged: (sourceName: " + source.getName() + ")" + current.toString());
+		Log.logDbgMsg(this, "stateChanged: (sourceName: " + source.getName() + ")" + current.toString());
 	}
 
 	@Override
 	public void tagsFound(GstObject source, TagList tagList) {
-		Log.logDebugMessage(this, "tagsFound");
+		Log.logDbgMsg(this, "tagsFound");
 	}
 
 	@Override
 	public void warningMessage(GstObject source, int code, String message) {
-		Log.logDebugMessage(this, "warningMessage: " + message);
+		Log.logDbgMsg(this, "warningMessage: " + message);
 	}
 }

@@ -1,13 +1,17 @@
 package soundfun.serial;
 
+import gnu.io.CommPortIdentifier; 
+import gnu.io.PortInUseException;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener; 
+import gnu.io.UnsupportedCommOperationException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
-import java.util.Vector;
-
-import gnu.io.CommPortIdentifier; 
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent; 
-import gnu.io.SerialPortEventListener; 
+import java.util.List;
+import java.util.TooManyListenersException;
+import soundfun.util.Log;
 
 /*
  * Class for talking to the serial device.
@@ -15,14 +19,14 @@ import gnu.io.SerialPortEventListener;
  * Currently uses Java RXTX although that could be
  * changed in the future by replacing this class.
  */
-class SerialListener implements SerialPortEventListener {
+final class SerialDeviceListener implements SerialPortEventListener {
 	SerialPort serialPort;
 	long msStartTime = -1;
 	String mSerialBuffer = null; // set to null when not in use
 	soundfun.serial.SerialManager mSerialManager = null;
 	
         /** The port we're normally going to use. */
-	private Vector<String> mPortNames = null;
+	private List<String> mPortNames = null;
 
 	/** Buffered input stream from the port */
 	private InputStream input;
@@ -33,22 +37,14 @@ class SerialListener implements SerialPortEventListener {
 	/** Default bits per second for COM port. */
 	private int mDataRate;
 	
-	@SuppressWarnings("unused")
-	private SerialListener() {} // Not to be called, ever.
-	
-	/*
-	 * Setup the initial configuration.
-	 */
-	SerialListener(Vector<String> port_names, int timeout, int datarate) {
-		mPortNames = port_names;
-		mTimeout = timeout;
-		mDataRate = datarate;
-	}
-	
 	/*
 	 * Allocate objects as necessary, find and open the port, start the listener.
 	 */
-	public void initialize() {
+	public void initialize(SerialOptions options) throws Exception {
+                mPortNames = options._getPorts();
+                mTimeout = options.getTimeout();
+                mDataRate = options.getDataRate();
+            
 		// SerialManager is used to provide serial data to the user without
 		mSerialManager = soundfun.serial.SerialManager.getSingleton();
 		
@@ -68,8 +64,8 @@ class SerialListener implements SerialPortEventListener {
 		}
 
 		if (portId == null) {
-			System.out.println("Could not find COM port.");
-			return;
+                    mSerialManager._serialConnection(false);
+                    throw new Exception("Could not find COM port.");
 		}
 
 		try {
@@ -89,9 +85,14 @@ class SerialListener implements SerialPortEventListener {
 			// add event listeners
 			serialPort.addEventListener(this);
 			serialPort.notifyOnDataAvailable(true);
-		} catch (Exception e) {
-			System.err.println(e.toString());
+		} catch (PortInUseException | UnsupportedCommOperationException | IOException | TooManyListenersException e) {
+			Log.logErrMsg(e.toString());
+                        throw e;
 		}
+                
+                // Successfully connected... This will eventually be a
+                // message sent by the device itself.
+                mSerialManager._serialConnection(true);
 	}
 
 	/**
@@ -124,7 +125,7 @@ class SerialListener implements SerialPortEventListener {
 				// Convert the first byte of data to a char, then send it to the SerialManager instance.
 				mSerialManager._serialEvent(soundfun.util.Conversions.byteToChar(chunk[0]));
 			} catch (Exception e) {
-				System.err.println(e.toString());
+				Log.logErrMsg(e.toString());
 			}
 			
 		// TODO: See if other event types may be of help.
