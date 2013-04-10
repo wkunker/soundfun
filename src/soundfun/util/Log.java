@@ -84,4 +84,24 @@ public class Log {
         public static void logDbgMsg(Object o, String msg) {
             Log.getSingleton().logDebugMessage(o, msg);
         }
+        
+        public void logTestMessage(Object o, String msg) {
+		msg = "Test: (" + o.getClass().getName() + ")" + msg;
+		
+                System.out.println(msg);
+
+                try {
+                        BufferedWriter file_output = new BufferedWriter(new FileWriter(Globals.LOG_FILE, true));
+                        file_output.append(msg);
+                        file_output.newLine();
+                        file_output.close();
+                } catch (IOException e) {
+                        logErrorMessage("Failed to open log file for ");
+                        e.printStackTrace();
+                }
+	}
+        
+        public static void logTestMsg(Object o, String msg) {
+            Log.getSingleton().logTestMessage(o, msg);
+        }
 }

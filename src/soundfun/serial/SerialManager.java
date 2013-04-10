@@ -14,7 +14,7 @@ public class SerialManager {
 	private List<SerialInterface> mSerialInterfaces = null;
 
 	// Communicates with the serial device.
-	private SerialDeviceListener mSerialListener = null;
+	private SerialDeviceListenerImpl mSerialListener = null;
         
         private List<String> mPorts = null;
 	
@@ -51,51 +51,21 @@ public class SerialManager {
 	}
 	
 	/*
-	 * Add a serial interface to read signals sent as they are received over serial.
-	 * As many interfaces can be added as desired.
-	 */
-	public void addSerialInterface(SerialInterface i) {
-		mSerialInterfaces.add(i);
-	}
-	
-	/*
-	 * Attempt to remove the specified SerialInterface implementation.
-	 * 
-	 * Silent on success, Exception thrown on failure.
-	 */
-	public void removeSerialInterface(SerialInterface i) throws Exception {
-		if(!mSerialInterfaces.remove(i)) {
-                    throw new Exception("Unable to remove specified SerialInterface implementation from SerialManager signal list since it does not exist.");
-                }
-	}
-	
-	/*
-	 * Processes a serial event sent from inside of the soundfun.serial package.
-	 */
-	void _serialEvent(char data) {
-            for(int i = 0; i < mSerialInterfaces.size(); i++) {
-                // Pass the signal to any connected serial interfaces.
-                mSerialInterfaces.get(i).serialEvent(data);
-            }
-	}
-        
-        /*
-         * Processes a serial connection event from inside the soundfun.serial package.
-         */
-        void _serialConnection(boolean connected) {
-            for(int i = 0; i < mSerialInterfaces.size(); i++) {
-                // Pass the signal to any connected serial interfaces.
-                mSerialInterfaces.get(i).serialConnection(connected);
-            }
-        }
-	
-	/*
 	 * Start the serial listener. This will attempt to open the port
 	 * and begin communication with the serial device.
 	 */
-	public void startSerialListener(SerialOptions options) throws Exception {
-            mSerialListener = new SerialDeviceListener();
-            mSerialListener.initialize(options);
+	public void startSerialListener(SerialInterface serialInterface, SerialOptions options) throws Exception {
+            mSerialListener = new SerialDeviceListenerImpl();
+            mSerialListener.initialize(serialInterface, options);
+	}
+        
+        /*
+         * Start a customer serial device listener. This would typically be used
+         * for testing mock device listeners, or to change serial functionality.
+         */
+        public void startSerialListener(SerialInterface serialInterface, SerialOptions options, SerialDeviceListenerImpl listener) throws Exception {
+            mSerialListener = listener;
+            mSerialListener.initialize(serialInterface, options);
 	}
 	
 	public void stopSerialListener() {

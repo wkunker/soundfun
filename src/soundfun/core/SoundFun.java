@@ -57,13 +57,12 @@ public class SoundFun {
 			
 			// Fire up serial interface.
 			SerialLogic serialLogic = new SerialLogic();
-			sm.addSerialInterface(serialLogic);
                         SerialOptions options = sm.createSerialOptions();
                         options.addPort("/dev/tty.usbserial-A9007UX1"); // Mac OS X
                         options.addPort("/dev/ttyUSB0"); // Linux
                         options.addPort("/dev/ttyACM0"); // Linux
                         options.addPort("COM3"); // Windows
-			sm.startSerialListener(options);
+			sm.startSerialListener(serialLogic, options);
 			
 			mPluginManager.dispose();
 		} catch(Exception e) {
