@@ -1,7 +1,7 @@
 <!--
     Ant standard build file
     @date       2012-03-01
-    @author     tane graf, Denny Kunker
+    @author     Tane Graf, Denny Kunker
 -->
 <project default="plugins">
     <!-- Description -->
@@ -10,15 +10,28 @@
     </description>
     <!-- Global properties -->
     <property name="src" value="src"/>
-    <property name="build" location="build"/>
+    <property name="build" value="build"/>
     <property name="dist" value="dist"/>
     <property name="docs" value="docs"/>
     <property name="jarfile" value="soundfun.jar"/>
     <property name="libdir" value="libs"/>
     <property name="mainclass" value="soundfun.core.SoundFun"/>
+    <property name="tests" value="tests"/>
+    <property name="testsbuild" value="${tests}/build"/>
 
     <path id="libclasspath">
         <fileset dir="${libdir}" includes="**/*.jar"/>
+    </path>
+    
+    <path id="buildclasspath">
+        <fileset dir="${build}" includes="**/*.jar"/>
+        <path refid="libclasspath"/>
+    </path>
+    
+    <path id="testsclasspath">
+        <fileset dir="${tests}" includes="**/*.jar"/>
+        <path refid="libclasspath"/>
+        <path refid="buildclasspath"/>
     </path>
 
     <!-- Initialization -->
@@ -27,6 +40,7 @@
         <tstamp/>
         <!-- Create the build directory structure used by compile -->
         <mkdir dir="${build}"/>
+        <mkdir dir="${testsbuild}"/>
     </target>
 
     <!-- Compilation -->
@@ -47,13 +61,13 @@
     	<move file="${jarfile}" tofile="${build}/${jarfile}"/>
     </target>
 	
-	<!-- Build plugins -->
-	<target name="plugins" depends="distrib" description="build available plugins as found in the plugins directory.">
-		<subant target="">
-			<property name="soundfunaction" value="true"/>
-			<fileset dir="plugins" includes="*/build.xml"/>
-		</subant>
-	</target>
+    <!-- Build plugins -->
+    <target name="plugins" depends="distrib" description="build available plugins as found in the plugins directory.">
+            <subant target="">
+                    <property name="soundfunaction" value="true"/>
+                    <fileset dir="plugins" includes="*/build.xml"/>
+            </subant>
+    </target>
 
 	<!-- Generate documentation -->
     <target name="docs" description="generates documentation">
@@ -66,6 +80,32 @@
             <link offline="true" href="http://download.oracle.com/javase/7/docs/api/" packagelistLoc="tmp"/>
             <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
         </javadoc>
+    </target>
+    
+    <!-- Tests compilation -->
+    <target name="compiletests" depends="distrib" description="compile the tests source">
+        <!-- Compile the java code from ${tests} into ${tests} -->
+        <javac srcdir="${tests}" destdir="${testsbuild}" classpathref="buildclasspath" includeantruntime="false"/>
+    </target>
+    
+    <!-- Tests distribution -->
+    <target name="distribtests" depends="compiletests" description="generate the tests distribution">
+        <!-- Put everything in ${testsbuild} into the MyProject-${DSTAMP}.jar file -->
+        <jar destfile="tests.jar" basedir="${testsbuild}"/>
+    	
+    	<move file="tests.jar" tofile="${tests}/tests.jar"/>
+    </target>
+    
+    <target name="test" depends="distribtests" description="unit tests">
+        <junit printsummary="yes" haltonfailure="yes">
+            <formatter type="xml"/>
+            <classpath refid="testsclasspath"/>
+            <batchtest fork="no" todir="${tests}">
+                <fileset dir="tests">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
     </target>
 
     <!-- Run the program -->
@@ -83,15 +123,22 @@
         <!-- Delete the ${build} and ${dist} directory trees -->
     	<delete file="log"/>
         <delete dir="${build}"/>
+        <delete dir="${testsbuild}"/>
         <delete dir="${docs}"/>
-		<delete>
-	        <!-- Delete mp3 files from current directory only -->
-	        <fileset dir="." includes="*.mp3"/>
+        <delete>
+            <!-- Delete mp3 files from current directory only -->
+            <fileset dir="." includes="*.mp3"/>
+        </delete>
+       
+        <delete>
+            <!-- Delete jar and xml files from tests directory -->
+            <fileset dir="tests" includes="*.jar"/>
+            <fileset dir="tests" includes="*.xml"/>
         </delete>
     	
     	<subant target="clean">
-			<property name="soundfunaction" value="true"/>
-			<fileset dir="plugins" includes="*/build.xml"/>
-		</subant>
+            <property name="soundfunaction" value="true"/>
+            <fileset dir="plugins" includes="*/build.xml"/>
+        </subant>
     </target>
 </project>
