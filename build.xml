@@ -18,6 +18,7 @@
     <property name="mainclass" value="soundfun.core.SoundFun"/>
     <property name="tests" value="tests"/>
     <property name="testsbuild" value="${tests}/build"/>
+    <property name="testsjar" value="tests.jar"/>
 
     <path id="libclasspath">
         <fileset dir="${libdir}" includes="**/*.jar"/>
@@ -91,16 +92,16 @@
     <!-- Tests distribution -->
     <target name="distribtests" depends="compiletests" description="generate the tests distribution">
         <!-- Put everything in ${testsbuild} into the MyProject-${DSTAMP}.jar file -->
-        <jar destfile="tests.jar" basedir="${testsbuild}"/>
+        <jar destfile="${testsjar}" basedir="${testsbuild}"/>
     	
-    	<move file="tests.jar" tofile="${tests}/tests.jar"/>
+    	<move file="${testsjar}" tofile="${tests}/${testsjar}"/>
     </target>
     
     <target name="test" depends="distribtests" description="unit tests">
         <junit printsummary="yes" haltonfailure="yes">
             <formatter type="xml"/>
             <classpath refid="testsclasspath"/>
-            <batchtest fork="no" todir="${tests}">
+            <batchtest fork="yes" todir="${tests}">
                 <fileset dir="tests">
                     <include name="**/*Test.java"/>
                 </fileset>
@@ -132,8 +133,8 @@
        
         <delete>
             <!-- Delete jar and xml files from tests directory -->
-            <fileset dir="tests" includes="*.jar"/>
-            <fileset dir="tests" includes="*.xml"/>
+            <fileset dir="${tests}" includes="*.jar"/>
+            <fileset dir="${tests}" includes="*.xml"/>
         </delete>
     	
     	<subant target="clean">
