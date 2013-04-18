@@ -1,7 +1,8 @@
 package soundfun.serial;
 
 /**
- * SerialDeviceListener 
+ * SerialDeviceListener - Listen to a device and send signals to the injected
+ * SerialInterface instance.
  */
 public interface SerialDeviceListener {
 
@@ -14,8 +15,8 @@ public interface SerialDeviceListener {
     /*
      * Allocate objects as necessary, find and open the port, start the listener.
      * 
-     * serialInterface is the SerialInterface implementation that serial event
+     * @param serialInterface the SerialInterface implementation that serial event
      * signals will be passed to when they occur.
      */
-    public void initialize(SerialInterface serialInterface, SerialOptions options) throws Exception;    
+    public void initialize(SerialInterface serialInterface, SerialOptions options) throws Exception;
 }

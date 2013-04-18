@@ -3,19 +3,18 @@ package soundfun.user.plugins;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.gstreamer.Bus;
 import org.gstreamer.Format;
 import org.gstreamer.GstObject;
 import org.gstreamer.Message;
 import org.gstreamer.State;
 import org.gstreamer.TagList;
-
 import soundfun.plugins.Action;
 import soundfun.sound.BusListener;
 import soundfun.sound.Player;
 import soundfun.sound.Recorder;
 import soundfun.sound.SoundManager;
+import soundfun.ui.ButtonGroup;
 import soundfun.ui.CheckBox;
 import soundfun.ui.FileChooser;
 import soundfun.ui.Label;
@@ -23,7 +22,6 @@ import soundfun.ui.RadioButton;
 import soundfun.ui.ToggleButton;
 import soundfun.ui.UIManager;
 import soundfun.util.Log;
-import soundfun.ui.ButtonGroup;
 
 /*
  * A plugin can often be written just by modifying this class.

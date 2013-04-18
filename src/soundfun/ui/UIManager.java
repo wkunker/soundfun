@@ -81,4 +81,8 @@ public class UIManager {
 	public CheckBox createCheckBox(EventListener listener) {
 		return new CheckBox(listener);
 	}
+        
+        public Dialog createDialog() {
+            return new Dialog();
+        }
 }

@@ -1,4 +1,5 @@
 package soundfun.serial;
+
 import soundfun.util.Log;
 
 public class SimpleSeriaDevicelTestInterface implements SerialInterface {

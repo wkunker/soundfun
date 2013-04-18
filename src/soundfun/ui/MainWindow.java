@@ -2,6 +2,7 @@ package soundfun.ui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import javax.swing.WindowConstants;
 import net.miginfocom.swing.MigLayout;
 
 /*
@@ -31,6 +32,11 @@ public class MainWindow {
 	private ListPanel mButtonListPanel = new ListPanel();
 	private javax.swing.JScrollPane mButtonScrollPane = new javax.swing.JScrollPane();
 	private ListModel mButtonListModel = mButtonListPanel.getListModel();
+        
+        private boolean mTopPanelEnabledBeforeDialog = true;
+        private boolean mBottomPanelEnabledBeforeDialog = true;
+        
+        private Dialog mCurrentDialog = null; // There can only be one dialog open at a time.
 	
 	public ListPanel getActionListPanel() {
 		return mActionListPanel;
@@ -222,5 +228,60 @@ public class MainWindow {
     	// Restore validity.
     	mMainWindowFrame.validate();
     	//mMainWindowFrame.repaint(50L);
+    }
+    
+    /*
+     * Creates and activates a dialog object. Destruction of the object
+     * is the responsibility of the code that called this method.
+     * 
+     * @param blocking If true, the main window will be disabled until
+     * the dialog is removed.
+     * 
+     * Returns false if a dialog is already present.
+     */
+    public boolean addDialog(Dialog dialog, boolean blocking) {
+        if(mCurrentDialog == null) {
+            //mMainWindowFrame.add(dialog);
+            
+            // Save the pre-existing state for once the dialog is closed.
+            mTopPanelEnabledBeforeDialog = mTopPanel.isEnabled();
+            mBottomPanelEnabledBeforeDialog = mBottomPanel.isEnabled();
+            
+            if(blocking) {
+                dialog.setUndecorated(true);
+
+                mTopPanel.setEnabled(false);
+                mBottomPanel.setEnabled(false);
+            }
+            
+            mCurrentDialog = dialog;
+            
+            dialog.pack();
+            dialog.setLocationRelativeTo(mMainWindowFrame);
+            dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+            dialog.setVisible(true);
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public boolean removeDialog(Dialog dialog) {
+        if(dialog.equals(mCurrentDialog)) {
+            //mMainWindowFrame.remove(dialog);
+
+            // Revert to the state before the dialog was open.
+            mTopPanel.setEnabled(mTopPanelEnabledBeforeDialog);
+            mBottomPanel.setEnabled(mBottomPanelEnabledBeforeDialog);
+            
+            dialog.setVisible(false);
+            
+            mCurrentDialog = null;
+            
+            return true;
+        }
+        
+        return false;
     }
 }

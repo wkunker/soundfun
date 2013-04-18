@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TooManyListenersException;
 import soundfun.util.Log;
 
@@ -37,6 +39,8 @@ public final class SerialDeviceListenerImpl implements SerialPortEventListener, 
 	
 	/** Default bits per second for COM port. */
 	private int mDataRate;
+        
+        private Timer mTimeoutTimer = null;
 	
 	/*
 	 * Allocate objects as necessary, find and open the port, start the listener.
@@ -47,6 +51,8 @@ public final class SerialDeviceListenerImpl implements SerialPortEventListener, 
                 mTimeout = options.getTimeout();
                 mDataRate = options.getDataRate();
                 mSerialInterface = serialInterface;
+                
+                mTimeoutTimer = new Timer();
             
 		// SerialManager is used to provide serial data to the user without
 		mSerialManager = soundfun.serial.SerialManager.getSingleton();
@@ -93,7 +99,10 @@ public final class SerialDeviceListenerImpl implements SerialPortEventListener, 
                         throw e;
 		}
                 
-                // Successfully connected... This will eventually be a
+                // Successfully connected...
+                
+                
+                //This will eventually be a
                 // message sent by the device itself.
                 mSerialInterface.serialConnection(true);
 	}
@@ -137,4 +146,21 @@ public final class SerialDeviceListenerImpl implements SerialPortEventListener, 
 		// TODO: See if other event types may be of help.
 		}
 	}
+
+    public void ping() {
+        /*
+         * TODO: Implement serial request system; must be done hardware side as well as here.
+         */
+        
+        
+        // After serial event is sent, start the timer.
+
+        mTimeoutTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                  // Serial connection failed; notify the dispatcher.
+                  mSerialInterface.serialConnection(false);
+                }
+              }, 500);
+    }
 }

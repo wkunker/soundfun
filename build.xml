@@ -30,7 +30,7 @@
     </path>
     
     <path id="testsclasspath">
-        <fileset dir="${tests}" includes="**/*.jar"/>
+        <fileset dir="${testsbuild}" includes="**/*.jar"/>
         <path refid="libclasspath"/>
         <path refid="buildclasspath"/>
     </path>
@@ -85,7 +85,7 @@
     
     <!-- Tests compilation -->
     <target name="compiletests" depends="distrib" description="compile the tests source">
-        <!-- Compile the java code from ${tests} into ${tests} -->
+        <!-- Compile the java code from ${tests} into ${testsbuild} -->
         <javac srcdir="${tests}" destdir="${testsbuild}" classpathref="buildclasspath" includeantruntime="false"/>
     </target>
     
@@ -94,14 +94,14 @@
         <!-- Put everything in ${testsbuild} into the MyProject-${DSTAMP}.jar file -->
         <jar destfile="${testsjar}" basedir="${testsbuild}"/>
     	
-    	<move file="${testsjar}" tofile="${tests}/${testsjar}"/>
+    	<move file="${testsjar}" tofile="${testsbuild}/${testsjar}"/>
     </target>
     
     <target name="test" depends="distribtests" description="unit tests">
         <junit printsummary="yes" haltonfailure="yes">
             <formatter type="xml"/>
             <classpath refid="testsclasspath"/>
-            <batchtest fork="yes" todir="${tests}">
+            <batchtest fork="yes" todir="${testsbuild}">
                 <fileset dir="tests">
                     <include name="**/*Test.java"/>
                 </fileset>
